@@ -3,7 +3,8 @@
 #include <cstddef>
 #include <cstdint>
 
-static size_t read_prefix(std::span<std::byte> data, size_t it, size_t length)
+static uint64_t read_prefix(std::span<const std::byte> data, size_t it,
+                            size_t length)
 {
     uint64_t value = 0;
     for (size_t i = 0; i < length; i++)
@@ -13,7 +14,7 @@ static size_t read_prefix(std::span<std::byte> data, size_t it, size_t length)
     return value;
 }
 
-void Parser::parse(std::span<std::byte> data, Consumer consumer)
+void Parser::parse(std::span<const std::byte> data, Consumer &consumer)
 {
     // read first byte, then switch case;
     // read depending on the case;

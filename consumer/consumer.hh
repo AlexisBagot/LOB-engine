@@ -10,5 +10,5 @@ private:
     std::array<uint64_t, 256> messages_codes;
 
 public:
-    void on_message(std::span<std::byte> data);
+    void on_message(std::span<const std::byte> data);
 };
