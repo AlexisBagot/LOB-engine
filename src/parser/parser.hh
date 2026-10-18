@@ -6,5 +6,5 @@
 class Parser
 {
 public:
-    void parse(std::span<const std::byte> data, Consumer &consumer);
+    size_t parse(std::span<const std::byte> data, Consumer &consumer);
 };

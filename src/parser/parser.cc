@@ -14,13 +14,14 @@ static uint64_t read_prefix(std::span<const std::byte> data, size_t it,
     return value;
 }
 
-void Parser::parse(std::span<const std::byte> data, Consumer &consumer)
+size_t Parser::parse(std::span<const std::byte> data, Consumer &consumer)
 {
     // read first byte, then switch case;
     // read depending on the case;
     // call consumer function
     // move it to length + 2 (2 bytes for size of message)
     // repeat until greater than end of span.
+    //
     size_t it = 0;
     while (it + 2 <= data.size())
     {
@@ -32,4 +33,5 @@ void Parser::parse(std::span<const std::byte> data, Consumer &consumer)
 
         it += len_message + 2;
     }
+    return it;
 }

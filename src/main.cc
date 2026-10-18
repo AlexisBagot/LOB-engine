@@ -1,3 +1,4 @@
+#include <chrono>
 #include <fcntl.h>
 #include <iostream>
 #include <span>
@@ -23,9 +24,9 @@ int main(int argc, char **argv)
             utils_print_help();
             return 0;
         }
-        for (int i = 0; i < argc; i++)
+        for (size_t i = 0; i < args.size(); i++)
         {
-            if (args[i] == "-f" && i + 1 < argc)
+            if (args[i] == "-f" && i + 1 < args.size())
             {
                 filename = args[i + 1];
             }
@@ -55,7 +56,6 @@ int main(int argc, char **argv)
     {
         ssize_t sizeRead = read(fd, buf.data() + readDataCounter,
                                 buf.size() - readDataCounter);
-        readDataCounter += sizeRead;
         if (sizeRead == 0)
             break;
         else if (sizeRead == -1)
@@ -63,6 +63,7 @@ int main(int argc, char **argv)
             std::cerr << "reading error!\n";
             return 1;
         }
+        readDataCounter += sizeRead;
     }
     close(fd);
 
@@ -78,5 +79,17 @@ int main(int argc, char **argv)
     // parsing logic
     Consumer consumer;
     Parser parser;
-    parser.parse(data, consumer);
+    auto timeBeforeParsing = std::chrono::steady_clock::now();
+    size_t parsedBytes = parser.parse(data, consumer);
+    auto timeAfterParsing = std::chrono::steady_clock::now();
+
+    auto timeTotalParsing =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(timeBeforeParsing
+                                                             - timeAfterParsing)
+            .count();
+
+    // display logic
+    consumer.report();
+    std::cout << "total parsed : " << parsedBytes << " bytes. in "
+              << timeTotalParsing << " nanoseconds.\n";
 }
