@@ -90,6 +90,6 @@ int main(int argc, char **argv)
 
     // display logic
     consumer.report();
-    std::cout << "total parsed : " << parsedBytes << " bytes. in "
-              << timeTotalParsing << " nanoseconds.\n";
+    std::cout << "total parsed : " << parsedBytes << " bytes.\n";
+    std::cerr << "in " << timeTotalParsing << " nanoseconds.\n";
 }
