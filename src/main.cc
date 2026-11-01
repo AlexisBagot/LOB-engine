@@ -13,27 +13,20 @@
 #include "parser/parser.hh"
 #include "utils/utils.hh"
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     std::string filename;
-    if (argc > 1)
-    {
+    if (argc > 1) {
         std::vector<std::string_view> args(argv + 1, argv + argc);
-        if (args[0] == "-h")
-        {
+        if (args[0] == "-h") {
             utils_print_help();
             return 0;
         }
-        for (size_t i = 0; i < args.size(); i++)
-        {
-            if (args[i] == "-f" && i + 1 < args.size())
-            {
+        for (size_t i = 0; i < args.size(); i++) {
+            if (args[i] == "-f" && i + 1 < args.size()) {
                 filename = args[i + 1];
             }
         }
-    }
-    else
-    {
+    } else {
         utils_print_help();
         return 1;
     }
@@ -41,8 +34,7 @@ int main(int argc, char **argv)
     // reading logic
 
     int fd = open(filename.data(), O_RDONLY);
-    if (fd == -1)
-    {
+    if (fd == -1) {
         std::cerr << "file does not exist / open error\n";
         return 1;
     }
@@ -52,14 +44,11 @@ int main(int argc, char **argv)
 
     std::vector<std::byte> buf(st.st_size);
     size_t readDataCounter = 0;
-    while (readDataCounter < buf.size())
-    {
-        ssize_t sizeRead = read(fd, buf.data() + readDataCounter,
-                                buf.size() - readDataCounter);
+    while (readDataCounter < buf.size()) {
+        ssize_t sizeRead = read(fd, buf.data() + readDataCounter, buf.size() - readDataCounter);
         if (sizeRead == 0)
             break;
-        else if (sizeRead == -1)
-        {
+        else if (sizeRead == -1) {
             std::cerr << "reading error!\n";
             return 1;
         }
@@ -67,10 +56,9 @@ int main(int argc, char **argv)
     }
     close(fd);
 
-    if (readDataCounter != buf.size())
-    {
-        std::cerr << "Wrong amount of data read: expected " << buf.size()
-                  << " bytes, got " << readDataCounter << " bytes.\n";
+    if (readDataCounter != buf.size()) {
+        std::cerr << "Wrong amount of data read: expected " << buf.size() << " bytes, got "
+                  << readDataCounter << " bytes.\n";
         return 1;
     }
 
@@ -84,8 +72,7 @@ int main(int argc, char **argv)
     auto timeAfterParsing = std::chrono::steady_clock::now();
 
     auto timeTotalParsing =
-        std::chrono::duration_cast<std::chrono::nanoseconds>(timeBeforeParsing
-                                                             - timeAfterParsing)
+        std::chrono::duration_cast<std::chrono::nanoseconds>(timeAfterParsing - timeBeforeParsing)
             .count();
 
     // display logic

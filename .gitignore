@@ -1,3 +1,8 @@
 data/
 build/
+build-debug/
+compile_commands.json
 tags
+tags.lock
+.cache/
+tests/fixtures/
